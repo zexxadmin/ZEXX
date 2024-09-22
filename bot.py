@@ -1,6 +1,8 @@
 import telebot
-from flask import Flask
+from flask import Flask, send_from_directory
 import config
+from urllib.parse import quote as url_quote  # Updated import
+from flask.cli import get_debug_flag
 
 # Initialize bot and Flask app
 bot = telebot.TeleBot(config.BOT_TOKEN)
@@ -33,10 +35,15 @@ plugins.text_effects.text_effect_commands(bot)
 def index():
     return "This is the ZEXX bot website with information about the bot."
 
+# Serve static files from the public folder
+@app.route('/public/<path:filename>')
+def serve_static_files(filename):
+    return send_from_directory('public', filename)
+
 # Function to start bot and website
 def start():
     bot.polling()  # Start the bot
-    app.run(port=3000)  # Start Flask server on port 3000
+    app.run(port=3000, host='0.0.0.0')  # Ensure the Flask server is publicly accessible
 
 if __name__ == "__main__":
     start()
