@@ -2,11 +2,12 @@ services:
   - type: web
     name: zexx-bot
     env: python
-    plan: free  # You can change this to 'starter' or other plans if needed
+    plan: free  # Change this to 'starter' or other plans if needed
     buildCommand: |
       pip install -r requirements.txt
     startCommand: |
       python3 bot.py
+    pythonVersion: 3.10  # Specify the Python version
     envVars:
       - key: BOT_TOKEN
         value: 7928488118:AAHwF6bGSJewnSx0XhYvLcjGC1xDLSsJdTw  # Replace with your actual Telegram bot token
@@ -15,5 +16,5 @@ services:
       - name: bot-data
         mountPath: /var/lib/data
     regions:
-      - oregon  # You can choose the region nearest to your users
-    dockerfilePath: Dockerfile  # Only needed if you plan on using a Docker-based build
+      - oregon  # Choose the region nearest to your users
+    dockerfilePath: Dockerfile  # Only needed if you use Docker-based builds

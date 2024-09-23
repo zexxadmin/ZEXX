@@ -1,8 +1,7 @@
+import os
 import telebot
 from flask import Flask, send_from_directory
 import config
-from urllib.parse import quote as url_quote  # Updated import
-from flask.cli import get_debug_flag
 
 # Initialize bot and Flask app
 bot = telebot.TeleBot(config.BOT_TOKEN)
@@ -42,8 +41,13 @@ def serve_static_files(filename):
 
 # Function to start bot and website
 def start():
-    bot.polling()  # Start the bot
-    app.run(port=3000, host='0.0.0.0')  # Ensure the Flask server is publicly accessible
+    import threading
+    # Start the bot in a separate thread
+    bot_thread = threading.Thread(target=bot.polling, daemon=True)
+    bot_thread.start()
+    # Start the Flask app
+    port = int(os.environ.get('PORT', 3000))  # Default to 3000 if PORT is not set
+    app.run(host='0.0.0.0', port=port)
 
 if __name__ == "__main__":
     start()
